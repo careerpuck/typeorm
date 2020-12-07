@@ -142,13 +142,15 @@ export class DateUtils {
         return value;
     }
 
+    static commaEscapeToken = "COMMA-o0VzS0z2qC";
+
     /**
      * Converts each item in the given array to string joined by "," separator.
      */
     static simpleArrayToString(value: any[]|any): string[]|any {
         if (Array.isArray(value)) {
             return (value as any[])
-                .map(i => String(i))
+                .map(i => String(i).replace(/,/g, this.commaEscapeToken))
                 .join(",");
         }
 
@@ -161,7 +163,9 @@ export class DateUtils {
     static stringToSimpleArray(value: string|any): string|any {
         if (value instanceof String || typeof value === "string") {
             if (value.length > 0) {
-                return value.split(",");
+                return value
+                    .split(",")
+                    .map(s => s.replace(new RegExp(this.commaEscapeToken, "g"), ","));
             } else {
                 return [];
             }
